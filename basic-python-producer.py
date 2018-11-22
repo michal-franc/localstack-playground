@@ -4,8 +4,8 @@ import logging
 import time
 
 local_stack_sns_endpoint = 'http://localhost:4575'
-
-local_stack_arn = 'arn:aws:sns:us-east-1:123456789012:'
+local_stack_arn = 'arn:aws:sns:eu-west-1:123456789012:'
+topic_name = 'test-producer'
 
 client = boto3.client(
     'sns',
@@ -15,7 +15,16 @@ client = boto3.client(
     aws_session_token='test'
 )
 
-topic_arn = '%stest-producer' % local_stack_arn
+print "creating topic %s" % topic_name
+
+response = client.create_topic(
+    Name=topic_name
+    )
+
+print "topic created %s" % response
+
+topic_arn = '%s%s' % (local_stack_arn, topic_name)
+
 print "sending messages to %s" % topic_arn
 
 while 1:
